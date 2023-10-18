@@ -1,0 +1,175 @@
+1.Write a program to arrange the letters of the word alphabetically in reverse order
+Sample Input:
+Enter the word : MOSQUE
+Sample Output:
+Alphabetical Order: U S Q O M E
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the word: ");
+        String word = scanner.nextLine();
+
+        String reversedAlphabeticalOrder = arrangeAlphabeticallyInReverse(word);
+
+        System.out.println("Alphabetical Order: " + reversedAlphabeticalOrder);
+    }
+
+    public static String arrangeAlphabeticallyInReverse(String word) {
+        // Convert the word to a character array
+        char[] charArray = word.toCharArray();
+
+        // Sort the character array in reverse alphabetical order
+        for (int i = 0; i < charArray.length - 1; i++) {
+            for (int j = i + 1; j < charArray.length; j++) {
+                if (charArray[i] < charArray[j]) {
+                    char temp = charArray[i];
+                    charArray[i] = charArray[j];
+                    charArray[j] = temp;
+                }
+            }
+        }
+
+        // Convert the sorted character array back to a string
+        return new String(charArray);
+    }
+}
+
+
+
+
+
+
+2.Write a program  to  a linked list, rotate the list to the right by k places, where k is non-negative.                                                                                                                                                Input: 1->2->3->4->5->NULL, k = 2
+Output: 4->5->1->2->3->NULL
+Explanation:
+rotate 1 steps to the right: 5->1->2->3->4->NULL
+rotate 2 steps to the right: 4->5->1->2->3->NUL
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+
+public class RotateLinkedList {
+    public static void main(String[] args) {
+        // Create a sample linked list: 1 -> 2 -> 3 -> 4 -> 5
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+        head.next.next.next.next = new ListNode(5);
+
+        int k = 2;
+
+        ListNode rotatedHead = rotateRight(head, k);
+
+        // Print the rotated linked list
+        printList(rotatedHead);
+    }
+
+    public static ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k == 0) {
+            return head;
+        }
+
+        // Calculate the length of the linked list
+        int length = 1;
+        ListNode tail = head;
+
+        while (tail.next != null) {
+            length++;
+            tail = tail.next;
+        }
+
+        // Calculate the new head and tail positions
+        k = k % length; // Handle cases where k is greater than the length
+        if (k == 0) {
+            return head; // No rotation needed
+        }
+
+        int newTailPosition = length - k - 1;
+        ListNode newTail = head;
+
+        for (int i = 0; i < newTailPosition; i++) {
+            newTail = newTail.next;
+        }
+
+        ListNode newHead = newTail.next;
+        newTail.next = null;
+        tail.next = head;
+
+        return newHead;
+    }
+
+    public static void printList(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val);
+            if (head.next != null) {
+                System.out.print(" -> ");
+            }
+            head = head.next;
+        }
+        System.out.println();
+    }
+}
+
+
+3.Sum program
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class ThreeSum {
+    public static List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i == 0 || (i > 0 && nums[i] != nums[i - 1])) {
+                int target = -nums[i];
+                int left = i + 1;
+                int right = nums.length - 1;
+
+                while (left < right) {
+                    if (nums[left] + nums[right] == target) {
+                        result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+
+                        left++;
+                        right--;
+                    } else if (nums[left] + nums[right] < target) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        List<List<Integer>> triplets = threeSum(nums);
+
+        for (List<Integer> triplet : triplets) {
+            System.out.println(triplet);
+        }
+    }
+}
